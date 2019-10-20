@@ -1,13 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { MongoClient}  from 'mongodb';
-
-
-export const mongoFactory: MongoClient = () => {
-  return new MongoClient('mongodb://localhost:27017');
-}
+import * as dotenv from 'dotenv';
 
 async function bootstrap() {
+
+  dotenv.config();
+
   const app = await NestFactory.create(AppModule);
   app.enableCors();
   await app.listen(3000);

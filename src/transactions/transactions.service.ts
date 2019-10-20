@@ -1,25 +1,33 @@
-import { Injectable } from '@nestjs/common';
-import { mongoFactory } from '../main';
-import { Observable } from 'rxjs';
+import { Injectable, Logger } from '@nestjs/common';
+import { DatabaseService } from '../database/database.service';
 
 @Injectable()
 export class TransactionsService {
 
-    async createTransaction(transaction: any){
-        const client = mongoFactory();
-        await client.connect();
-        console.log("creating transaction", transaction);
+    constructor(
+        private logger: Logger,
+        private databaseService: DatabaseService,
+    ) {
 
-        client.db('budget').collection('transactions').insertOne(transaction)
+    }
+
+    async createTransaction(transaction: any) {
+        const client = await this.databaseService.getClient();
+        await client.connect();
+        this.logger.log('creating transaction');
+        client.db('budget').collection('transactions').insertOne(transaction);
         client.close();
     }
 
     async getTransactions(): Promise<any[]> {
-        const client = mongoFactory();
+        const client = await this.databaseService.getClient();
         await client.connect();
-        return client.db('budget')
+        const transactions =  client.db('budget')
             .collection('transactions')
             .find({})
             .toArray();
+
+        await client.close();
+        return transactions;
     }
 }

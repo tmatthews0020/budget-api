@@ -6,18 +6,18 @@ export class TransactionsController {
 
     constructor(
         private transactionService: TransactionsService,
-    ){
+    ) {
     }
 
     @Get()
-    async getTransactions(){
+    async getTransactions() {
         return await this.transactionService.getTransactions();
     }
 
     @Post()
     async createTransaction(@Body() transaction: any) {
 
-        if (!transaction){
+        if (!transaction) {
             throw new BadRequestException();
         }
 
