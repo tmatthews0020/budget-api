@@ -67,6 +67,7 @@ export class UsersService {
                 });
             } catch (err) {
                 this.logger.error(err.message);
+                return reject();
             }
         });
     }

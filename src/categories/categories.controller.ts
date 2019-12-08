@@ -22,7 +22,7 @@ export class CategoriesController {
         if (!category) {
             return new BadRequestException();
         }
-        
+
         await this.categoriesService.createCategory(category);
     }
 }
